@@ -16,16 +16,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $usuarios = User::select(
-            "id",
-            "name",
-            "lastname",
-            "username",
-            "email",
-            "created_at",
-            "updated_at"
-        )->get();
-        return response()->json($usuarios);
+        $users = User::when(request()->has('username'), function($query){
+            $query->where('username', 'like', '%'.request()->input('username').'%')->get();
+        })->when(request()->has('email'), function($query){
+            $query->where('email', 'like', '%'.request()->input('email').'%')->get();
+        })->paginate(request()->per_page);
+        
+        return UserResource::collection($users);
     }
 
     /**
