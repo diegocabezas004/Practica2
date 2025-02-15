@@ -65,7 +65,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(User $user)
+    public function destroy(User $user)
     {
         $user->delete();
 
